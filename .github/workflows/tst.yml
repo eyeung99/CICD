@@ -66,10 +66,5 @@ jobs:
      # run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
       #if: matrix.os == 'ubuntu-latest'
 
---- |-
-  workflow "Go" { on = "pull_request" resolves = ["gofmt"] }
-  action "gofmt" { uses    = "sjkaliski/go-github-actions/fmt@v1.0.0" needs   = "previous-action" secrets = ["GITHUB_TOKEN"]
-  env { GO_WORKING_DIR = "./path/to/go/files" GO_IGNORE_DIRS = "./vendor" } }
-
 
 
