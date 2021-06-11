@@ -26,8 +26,8 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Checkout Code
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout Code
       uses: actions/checkout@v2
     
     # Setup Go
@@ -60,3 +60,7 @@ jobs:
         DEFAULT_BRANCH: main
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    # Ensure that the code has been formatted with gofmt
+    - name: Format
+      run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+      if: matrix.os == 'ubuntu-latest'
