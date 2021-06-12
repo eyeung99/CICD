@@ -71,7 +71,7 @@ jobs:
       run: |
         git config --global user.name 'Estella Yeung'
         git config --global user.email 'estellayeung@hotmail.com'
-        sudo usermod -a -G root 'runner'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
         git branch temp-branch
         git checkout main
         git commit -am "Automated changes"
