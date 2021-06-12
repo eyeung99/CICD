@@ -71,6 +71,7 @@ jobs:
       run: |
         git config --global user.name 'Estella Yeung'
         git config --global user.email 'estellayeung@hotmail.com'
+        sudo chown -R eyeung99:staff .git
         git branch temp-branch
         git checkout main
         git commit -am "Automated changes"
