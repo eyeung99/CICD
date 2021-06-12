@@ -14,15 +14,15 @@ import (
 )
 
 type UserServerI interface {
-	GetRegistry () map[string]string
-	GetUserStatus () map[string]bool
-	GetCounter () map[int32]int32
+	GetRegistry() map[string]string
+	GetUserStatus() map[string]bool
+	GetCounter() map[int32]int32
 }
 
 type MemoryDB struct {
 	registry map[string]string
 	loggedIn map[string]bool
-	counter map[int32]int32
+	counter  map[int32]int32
 }
 
 func (a MemoryDB) GetRegistry() map[string]string {
@@ -42,22 +42,22 @@ type UserServer struct {
 	UserServerI
 }
 
-func (U *UserServer)Register(ctx context.Context, user *example.RegisterRequest) (*example.RegisterResponse, error){
+func (U *UserServer) Register(ctx context.Context, user *example.RegisterRequest) (*example.RegisterResponse, error) {
 	U.mu.Lock()
 	defer U.mu.Unlock()
 	U.GetRegistry()[user.Username] = user.Password
-	fmt.Println(user," has been registered")
-	return &example.RegisterResponse{Success:true}, nil
+	fmt.Println(user, " has been registered")
+	return &example.RegisterResponse{Success: true}, nil
 }
 
-func (U *UserServer)Login(ctx context.Context, user *example.LoginRequest) (*example.LoginResponse, error){
+func (U *UserServer) Login(ctx context.Context, user *example.LoginRequest) (*example.LoginResponse, error) {
 	U.mu.Lock()
 	defer U.mu.Unlock()
-	if _, ok := U.GetRegistry()[user.Username]; ok{
+	if _, ok := U.GetRegistry()[user.Username]; ok {
 		U.GetUserStatus()[user.Username] = true
 	}
 
-	return &example.LoginResponse{Success:U.GetUserStatus()[user.Username]},nil
+	return &example.LoginResponse{Success: U.GetUserStatus()[user.Username]}, nil
 }
 
 func (U *UserServer) DoAction(ctx context.Context, in *example.DoActionRequest) (*example.DoActionResponse, error) {
@@ -68,8 +68,6 @@ func (U *UserServer) DoAction(ctx context.Context, in *example.DoActionRequest) 
 	}
 	return &example.DoActionResponse{}, nil
 }
-
-
 
 func main() {
 	// Maps and slices should be initialized for it to be used
@@ -82,8 +80,8 @@ func main() {
 
 	doAction := &example.DoActionRequest{
 		Username: "Test",
-		Number: 10,
-		Counter : 2,
+		Number:   10,
+		Counter:  2,
 	}
 
 	selfDefinedServer := &UserServer{
@@ -97,7 +95,7 @@ func main() {
 	// Started server
 	go Server(selfDefinedServer)
 
-	time.Sleep(1*time.Second)
+	time.Sleep(1 * time.Second)
 
 	// Create our client
 	client := Client()
@@ -107,7 +105,7 @@ func main() {
 	// 1000 Register requests at the same time
 	wg := sync.WaitGroup{}
 	wg.Add(1000)
-	for i :=0; i < 1000; i++ {
+	for i := 0; i < 1000; i++ {
 		go func(i int) {
 			defer wg.Done()
 			userRegister := &example.RegisterRequest{
@@ -134,7 +132,6 @@ func main() {
 	fmt.Println(response2)
 	fmt.Println(response3)
 }
-
 
 // Creating GRPC Client
 func Client() example.UserServiceClient {
