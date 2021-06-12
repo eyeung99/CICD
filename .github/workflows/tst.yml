@@ -71,6 +71,12 @@ jobs:
       run: |
         git config --global user.name 'Estella Yeung'
         git config --global user.email 'estellayeung@hotmail.com'
+        git branch temp-branch
+        git checkout main
         git commit -am "Automated changes"
-        git push 
+        git merge temp-branch        
+        git push origin main
+        
+
+        
     #   git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
