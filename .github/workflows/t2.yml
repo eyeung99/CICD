@@ -1,0 +1,82 @@
+# This is the GitHub Actions workflow for Go Code 
+
+name: Test2
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
+on:
+  push:
+    branches:
+    - main
+    - staging
+    - develop
+  pull_request:
+    branches:
+    - main
+    - staging
+    - develop
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # The "build" workflow
+  build:
+    # The type of runner that the job will run on
+    name: Set Runner Type
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout Code
+      uses: actions/checkout@v2
+    
+    # Setup Go.  The Go version to download (if necessary) and use.
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.15.x' 
+    
+    # Install all the dependencies
+    - name: Install dependencies
+      run: |
+        go version
+        go get -u golang.org/x/lint/golint
+        
+    # Run build of the application
+    - name: Run build
+      run: go build . 
+      
+    # Run vet & lint on the code
+    #- name: Run vet & lint
+    #  run: |
+    #    go vet .
+    #    golint .
+  
+    # Run super linter on the code
+    #- name: Run super linter
+    #  uses: github/super-linter@v4
+    #  env:
+    #    VALIDATE_ALL_CODEBASE: false
+    #    DEFAULT_BRANCH: main
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Format the code with gofmt
+    - name: Format
+      run: gofmt -s -w .
+    - name: Check for modified files
+      id: git-check
+      run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+    - name: Push changes
+      if: steps.git-check.outputs.modified == 'true'
+      run: |
+        git config --global user.name 'Estella Yeung'
+        git config --global user.email 'estellayeung@hotmail.com'
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git branch temp-branch
+        git checkout main
+        git commit -am "Automated changes"
+        git merge temp-branch        
+        git push origin main
