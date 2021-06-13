@@ -6,7 +6,6 @@ name: Test
 # events but only for the main branch
 on:
   push:
-  permissions: read-all|write-all
     branches:
     - main
     - staging
@@ -79,7 +78,7 @@ jobs:
         git merge temp-branch        
         git push origin main
         
-        #
+        
         
 
         
