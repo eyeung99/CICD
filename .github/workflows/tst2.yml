@@ -65,10 +65,10 @@ jobs:
         git config --global user.name 'Estella Yeung'
         git config --global user.email 'estellayeung@hotmail.com'
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-       # git branch temp-branch
-       # git checkout main
+        git branch temp-branch
+        git checkout main
         git commit -am "Automated changes"
-       # git merge temp-branch        
+        git merge temp-branch        
         git push origin main
         
 
