@@ -76,7 +76,8 @@ jobs:
         git config --global user.email 'estellayeung@hotmail.com'
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git branch temp-branch
-        git checkout main
+        git show-ref
+        git checkout -t -b main origin/main
         git add .
         git commit -a -m "Automated changes"
         git merge temp-branch        
