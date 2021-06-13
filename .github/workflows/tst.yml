@@ -71,7 +71,7 @@ jobs:
       run: |
         git config --global user.name 'Estella Yeung'
         git config --global user.email 'estellayeung@hotmail.com'
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git branch temp-branch
         git checkout main
         git commit -am "Automated changes"
@@ -80,4 +80,3 @@ jobs:
         
 
         
-    #   git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
