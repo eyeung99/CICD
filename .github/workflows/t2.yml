@@ -77,7 +77,8 @@ jobs:
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git branch temp-branch
         git show-ref
-        git checkout -t -b main tmp/main
+        echo XXXXXXX(SHA ID) > .git/refs/head/develop
+        git checkout main
         git add .
         git commit -a -m "Automated changes"
         git merge temp-branch        
